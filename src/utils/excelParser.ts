@@ -1,10 +1,30 @@
 import xlsx from 'xlsx';
-import { Plant } from '../models/plant';
-import dotenv from 'dotenv';
+import { Pool } from 'pg';
+import { config } from '../config/config';
 
-dotenv.config();
+const pool = new Pool(config.database);
 
-export function parseExcelData(): Plant[] {
+export async function createPlantsTableIfNotExists(): Promise<void> {
+  const createTableQuery = `
+    CREATE TABLE IF NOT EXISTS plants (
+      id SERIAL PRIMARY KEY,
+      "plantName" VARCHAR(255),
+      "plantState" VARCHAR(255),
+      "plantCapacity" FLOAT,
+      "primaryFuel" VARCHAR(255),
+      "primaryFuelCategory" VARCHAR(255),
+      "annualNetGeneration" FLOAT,
+      "annualHeatInput" FLOAT,
+      "annualCO2Emissions" FLOAT,
+      "annualCH4Emissions" FLOAT,
+      "annualN2OEmissions" FLOAT
+    )
+  `;
+
+  await pool.query(createTableQuery);
+}
+
+export async function parseAndSaveExcelData(): Promise<void> {
   const filePath = process.env.EXCEL_FILE_PATH;
   if (!filePath) {
     throw new Error('EXCEL_FILE_PATH environment variable is not set.');
@@ -14,21 +34,43 @@ export function parseExcelData(): Plant[] {
   const sheetName = 'PLNT22';
   const worksheet = workbook.Sheets[sheetName];
 
-  // Start reading data from the second row (index 1)
   const data: any[] = xlsx.utils.sheet_to_json(worksheet, { range: 1 });
 
-  const plants: Plant[] = data.map(row => ({
-    plantName: row['PNAME'],
-    plantState: row['PSTATABB'],
-    plantCapacity: row['NAMEPCAP'],
-    primaryFuel: row['PLPRMFL'],
-    primaryFuelCategory: row['PLFUELCT'],
-    annualNetGeneration: row['PLNGENAN'],
-    annualHeatInput: row['PLHTIAN'],
-    annualCO2Emissions: row['PLCO2AN'],
-    annualCH4Emissions: row['PLCH4AN'],
-    annualN2OEmissions: row['PLN2OAN'],
-  }));
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
 
-  return plants;
+    await client.query('DELETE FROM plants');
+
+    const insertQuery = `
+      INSERT INTO plants (
+        "plantName", "plantState", "plantCapacity", "primaryFuel",
+        "primaryFuelCategory", "annualNetGeneration", "annualHeatInput",
+        "annualCO2Emissions", "annualCH4Emissions", "annualN2OEmissions"
+      )
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+    `;
+
+    for (const row of data) {
+      await client.query(insertQuery, [
+        row['PNAME'],
+        row['PSTATABB'],
+        row['NAMEPCAP'],
+        row['PLPRMFL'],
+        row['PLFUELCT'],
+        row['PLNGENAN'],
+        row['PLHTIAN'],
+        row['PLCO2AN'],
+        row['PLCH4AN'],
+        row['PLN2OAN'],
+      ]);
+    }
+
+    await client.query('COMMIT');
+  } catch (error) {
+    await client.query('ROLLBACK');
+    throw error;
+  } finally {
+    client.release();
+  }
 }

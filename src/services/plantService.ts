@@ -1,41 +1,31 @@
-import { Plant } from '../models/plant';
 
-export function getTopPlants(plants: Plant[], count: number): Plant[] {
-  const sortedPlants = plants.sort((a, b) => b.annualNetGeneration - a.annualNetGeneration);
-  return sortedPlants.slice(0, count);
-}
+/**
+ * Retrieves the top plants with their state percentages.
+ * @param count - The number of plants to retrieve.
+ * @param state - Optional. The state of the plants to filter by.
+ * @returns A promise that resolves to an array of plants with their state percentages.
+ */
+import { Pool } from 'pg';
+import { config } from '../config/config';
 
-export function filterPlantsByState(plants: Plant[], state: string): Plant[] {
-  return plants.filter(plant => plant.plantState === state);
-}
+const pool = new Pool(config.database);
 
-export function calculatePlantPercentages(plants: Plant[]): Plant[] {
-  const stateTotals: { [state: string]: number } = {};
+export async function getTopPlantsWithPercentages(count: number, state?: string): Promise<any[]> {
+  const query = `
+    SELECT p.*, (p."annualNetGeneration" / t.total_generation) * 100 AS "statePercentage"
+    FROM plants p
+    JOIN (
+      SELECT "plantState", SUM("annualNetGeneration") AS total_generation
+      FROM plants
+      GROUP BY "plantState"
+    ) t ON p."plantState" = t."plantState"
+    ${state ? 'WHERE p."plantState" = $1' : ''}
+    ORDER BY p."annualNetGeneration" DESC
+    LIMIT $${state ? '2' : '1'}
+  `;
 
-  // Calculate total annual net generation for each state
-  plants.forEach(plant => {
-    const state = plant.plantState;
-    stateTotals[state] = (stateTotals[state] || 0) + plant.annualNetGeneration;
-  });
+  const values = state ? [state, count] : [count];
 
-  // Calculate percentage of each plant's generation within its state
-  const plantsWithPercentage = plants.map(plant => ({
-    ...plant,
-    statePercentage: (plant.annualNetGeneration / stateTotals[plant.plantState]) * 100,
-  }));
-
-  return plantsWithPercentage;
-}
-
-export function getTopPlantsWithPercentages(plants: Plant[], count: number, state?: string): Plant[] {
-  let filteredPlants = plants;
-
-  if (state) {
-    filteredPlants = filterPlantsByState(plants, state);
-  }
-
-  const plantsWithPercentage = calculatePlantPercentages(filteredPlants);
-  const topPlants = getTopPlants(plantsWithPercentage, count);
-
-  return topPlants;
+  const result = await pool.query(query, values);
+  return result.rows;
 }
