@@ -1,3 +1,11 @@
+/**
+ * Creates the `plants` table in the database if it does not already exist.
+ * The table includes columns for plant ID, name, state, capacity, primary fuel and its category,
+ * as well as annual net generation, heat input, and emissions (CO2, CH4, N2O).
+ * 
+ * @returns {Promise<void>} A promise that resolves when the table is created or already exists.
+ */
+
 import xlsx from 'xlsx';
 import { Pool } from 'pg';
 import { config } from '../config/config';
@@ -23,6 +31,16 @@ export async function createPlantsTableIfNotExists(): Promise<void> {
 
   await pool.query(createTableQuery);
 }
+
+/**
+ * Parses data from an Excel file and saves it to the `plants` table in the database.
+ * The Excel file path is read from the `EXCEL_FILE_PATH` environment variable.
+ * The function reads the specified sheet ('PLNT22'), parses each row into a JSON object,
+ * and inserts the data into the `plants` table. Existing data in the table is deleted before new data is inserted.
+ * 
+ * @throws {Error} If the `EXCEL_FILE_PATH` environment variable is not set or if any error occurs during the database operations.
+ * @returns {Promise<void>} A promise that resolves when the data has been successfully parsed and saved to the database.
+ */
 
 export async function parseAndSaveExcelData(): Promise<void> {
   const filePath = process.env.EXCEL_FILE_PATH;

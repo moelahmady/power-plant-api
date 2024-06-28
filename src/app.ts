@@ -1,3 +1,9 @@
+/***
+ * This is the main entry point of the application.
+ * It connects to the database, creates the plants table if it doesn't exist, and parses the Excel file to save the data in the database before starting the server.
+ * It also starts the server and listens on a specified port.
+ * @module src/app
+ */
 import express from 'express';
 import { createPlantsTableIfNotExists, parseAndSaveExcelData } from './utils/excelParser';
 import plantRoutes from './routes/plantRoutes';
