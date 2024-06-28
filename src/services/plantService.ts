@@ -13,17 +13,19 @@ const pool = new Pool(config.database);
 
 export async function getTopPlantsWithPercentages(count: number, state?: string): Promise<any[]> {
   const query = `
-    SELECT p.*, (p."annualNetGeneration" / COALESCE(t.total_generation, 0)) * 100 AS "statePercentage"
-    FROM plants p
-    LEFT JOIN (
-      SELECT "plantState", SUM("annualNetGeneration") AS total_generation
-      FROM plants
-      GROUP BY "plantState"
-    ) t ON p."plantState" = t."plantState"
-    ${state ? 'WHERE p."plantState" = $1' : ''}
-    ORDER BY p."annualNetGeneration" DESC NULLS LAST
-    LIMIT ${state ? '$2' : '$1'}
+  SELECT p.*, 
+         ROUND(CAST((p."annualNetGeneration" / COALESCE(t.total_generation, 0)) * 100 AS NUMERIC), 2) AS "statePercentage"
+  FROM plants p
+  LEFT JOIN (
+    SELECT "plantState", SUM("annualNetGeneration") AS total_generation
+    FROM plants
+    GROUP BY "plantState"
+  ) t ON p."plantState" = t."plantState"
+  ${state ? 'WHERE p."plantState" = $1' : ''}
+  ORDER BY p."annualNetGeneration" DESC NULLS LAST
+  LIMIT ${state ? '$2' : '$1'} 
   `;
+
 
   // If state is provided, the values array will contain state and count, otherwise just count
   const values = state ? [state, count] : [count];

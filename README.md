@@ -1,6 +1,8 @@
 # AIQ-Challenge-TopN-Power-Plants
 
-This project is designed to run in a Dockerized environment, simplifying setup and ensuring consistent runtime conditions across different machines.
+TopN-Power-Plants is s a RESTful service designed to visualize and analyze the annual net generation of power plants in the United States. Utilizing data from the eGRID2022 file, this Node.js application allows users to retrieve information about the top N power plants, view data by state, and understand the power generation landscape through absolute values and percentages.
+
+
 
 ## Prerequisites
 
