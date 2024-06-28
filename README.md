@@ -1,26 +1,47 @@
-# Power Plant API
+# My Project
 
-This API provides information about the top N power plants based on various criteria.
+This project is designed to run in a Dockerized environment, simplifying setup and ensuring consistent runtime conditions across different machines.
+
+## Prerequisites
+
+- Docker
+- Docker Compose
 
 ## Installation
 
-1. Clone the repository: `git clone https://github.com/elahmday/power-plant-api.git`
-2. Navigate to the project directory: `cd power-plant-api`
-3. Install dependencies: `npm install`
+1. Clone the repository: 
+git clone https://github.com/yourusername/my-project.git
 
-## Usage
+2. Navigate to the project directory
 
-1. Start the server: `npm start`
-2. Send a GET request to `/power-plants?top=N` where N is the number of power plants you want to retrieve.
+## Configuration
 
-## API Endpoints
+Before running the application, you need to set up the environment variables:
 
-- `GET /power-plants?top=N`: Retrieves the top N power plants based on the specified criteria.
+1. Copy the `.env.sample` file to a new file named `.env`.
 
-## Contributing
+2. Edit the `.env` file with your preferred text editor and set the necessary environment variables.
 
-Contributions are welcome! Please follow the guidelines in [CONTRIBUTING.md](./CONTRIBUTING.md).
+## Running with Docker Compose
 
-## License
+To start the application using Docker Compose, run the following command in the project root directory:
 
-This project is licensed under the [MIT License](./LICENSE).
+docker-compose up --build
+
+
+## Accessing the Application
+
+Once the application is running, you can access it at `http://localhost:PORT`, where `PORT` is the port number specified in your `.env` file or `docker-compose.yml`.
+
+## Environment Variables Sample (.env.sample)
+
+Here is an example of what your `.env.sample` file might look like:
+
+EXCEL_FILE_PATH=path_to_your_data
+APP_PORT=3000
+DB_TYPE=postgres
+PG_HOST=pgdb
+PG_USER=your_username
+PG_PASSWORD=your_password
+PG_DB=your_database_name
+PG_PORT=5432

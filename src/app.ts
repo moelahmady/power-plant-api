@@ -1,24 +1,30 @@
 import express from 'express';
 import { createPlantsTableIfNotExists, parseAndSaveExcelData } from './utils/excelParser';
 import plantRoutes from './routes/plantRoutes';
-
-require('dotenv').config();
+import { Pool } from 'pg';
+import { config } from './config/config';
 
 const app = express();
+const pool = new Pool(config.database);
 
 app.use('/api/plants', plantRoutes);
 
-createPlantsTableIfNotExists()
-  .then(() => {
-    return parseAndSaveExcelData();
-  })
-  .then(() => {
-    const port = process.env.PORT || 3000;
+async function startServer() {
+  try {
+    await pool.connect();
+    console.log('Connected to the database');
+
+    await createPlantsTableIfNotExists();
+    await parseAndSaveExcelData();
+
+    const port = process.env.APP_PORT || 3000;
     app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
     });
-  })
-  .catch(error => {
-    console.error('Error creating table or parsing and saving Excel data:', error);
+  } catch (error) {
+    console.error('Error connecting to the database or starting the server:', error);
     process.exit(1);
-  });
+  }
+}
+
+startServer();

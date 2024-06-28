@@ -1,0 +1,24 @@
+services:
+  expressapp:
+    container_name: power_plant_api
+    image: elahmady/power_plant_api:1.0.0
+    build: .
+    ports:
+      - 3000:3000
+    env_file:
+      - .env
+    depends_on:
+      - db
+    volumes:
+      - ./src/data:/app/src/data
+  db:
+    container_name: pgdb
+    image: postgres
+    ports:
+      - 5432:5432
+    env_file:
+      - .env
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata: {}

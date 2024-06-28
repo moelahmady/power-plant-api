@@ -7,10 +7,10 @@ dotenv.config();
 
 export const config = {
     database: {
-      host: process.env.DB_HOST || 'localhost',
-      port: Number(process.env.DB_PORT) || 5432,
-      user: process.env.DB_USERNAME || 'your_username',
-      password: process.env.DB_PASSWORD || 'your_password',
-      database: process.env.DB_NAME || 'your_database',
+      host: process.env.PG_HOST || 'localhost',
+      port: Number(process.env.PG_PORT) || 5432,
+      user: process.env.PG_USER || 'your_username',
+      password: process.env.PG_PASSWORD || 'your_password',
+      database: process.env.PG_DB || 'your_database',
     },
   };
