@@ -1,4 +1,3 @@
-
 /**
  * Retrieves the top plants with their state percentages.
  * @param count - The number of plants to retrieve.
@@ -12,15 +11,15 @@ const pool = new Pool(config.database);
 
 export async function getTopPlantsWithPercentages(count: number, state?: string): Promise<any[]> {
   const query = `
-    SELECT p.*, (p."annualNetGeneration" / t.total_generation) * 100 AS "statePercentage"
+    SELECT p.*, (p."annualNetGeneration" / COALESCE(t.total_generation, 0)) * 100 AS "statePercentage"
     FROM plants p
-    JOIN (
+    LEFT JOIN (
       SELECT "plantState", SUM("annualNetGeneration") AS total_generation
       FROM plants
       GROUP BY "plantState"
     ) t ON p."plantState" = t."plantState"
     ${state ? 'WHERE p."plantState" = $1' : ''}
-    ORDER BY p."annualNetGeneration" DESC
+    ORDER BY p."annualNetGeneration" DESC NULLS LAST
     LIMIT $${state ? '2' : '1'}
   `;
 
