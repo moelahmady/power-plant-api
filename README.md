@@ -45,3 +45,17 @@ PG_USER=your_username
 PG_PASSWORD=your_password
 PG_DB=your_database_name
 PG_PORT=5432
+
+## API Usage
+
+To interact with the API, you can make requests to the following endpoint:
+
+    GET /api/plants/top?count=N&state=some_state
+
+- `count` (optional): The number of top plants to retrieve if not specified will get top 10 plants.
+- `state` (optional): The state for which you want to retrieve the top plants. If not specified, the top plants from all states will be returned.
+
+Example request:
+
+    curl http://localhost:3000/api/plants/top?count=5&state=CA
+This request will return the top 5 plants from California.
