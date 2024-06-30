@@ -5,10 +5,12 @@
  * @module src/app
  */
 import express from 'express';
-import { createPlantsTableIfNotExists, parseAndSaveExcelData } from './utils/excelParser';
+import { parseAndSaveExcelData } from './utils/excelParser';
 import plantRoutes from './routes/plantRoutes';
 import { Pool } from 'pg';
 import { config } from './config/config';
+import { connectToDatabase, createPlantsTableIfNotExists } from './db/operations';
+import { connect } from 'http2';
 
 const app = express();
 const pool = new Pool(config.database);
@@ -17,9 +19,8 @@ app.use('/api/plants', plantRoutes);
 
 async function startServer() {
   try {
-    await pool.connect();
-    console.log('Connected to the database');
-
+    
+    await connectToDatabase();
     await createPlantsTableIfNotExists();
     await parseAndSaveExcelData();
 

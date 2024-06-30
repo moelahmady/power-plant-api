@@ -12,26 +12,6 @@ import { config } from "../config/config";
 
 const pool = new Pool(config.database);
 
-export async function dropPlantsTable(): Promise<void> {
-  const dropTableQuery = `
-    DROP TABLE IF EXISTS plants CASCADE;
-  `;
-  await pool.query(dropTableQuery);
-}
-
-export async function createPlantsTableIfNotExists(): Promise<void> {
-  const createTableQuery = `
-    CREATE TABLE IF NOT EXISTS plants (
-      id SERIAL PRIMARY KEY,
-      "plantName" VARCHAR(255),
-      "plantState" VARCHAR(255),
-      "annualNetGeneration" FLOAT
-    )
-  `;
-
-  await pool.query(createTableQuery);
-}
-
 /**
  * Parses data from an Excel file and saves it to the `plants` table in the database.
  * The Excel file path is read from the `EXCEL_FILE_PATH` environment variable.
