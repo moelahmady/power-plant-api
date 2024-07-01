@@ -85,7 +85,7 @@ Before running the application, you need to set up the environment variables:
 5. Create a new database and user:
 
     ```bash
-    psql -U postgresd
+    psql -U postgres
     CREATE DATABASE power_plant_db;
     CREATE USER power_plant_user WITH ENCRYPTED PASSWORD 'yourpassword';
     GRANT ALL PRIVILEGES ON DATABASE power_plant_db TO power_plant_user;
