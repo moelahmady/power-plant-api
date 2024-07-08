@@ -4,22 +4,20 @@
  * It also starts the server and listens on a specified port.
  * @module src/app
  */
-import express from 'express';
-import { parseAndSaveExcelData } from './utils/excelParser';
-import plantRoutes from './routes/plantRoutes';
-import { Pool } from 'pg';
-import { config } from './config/config';
-import { connectToDatabase, createPlantsTableIfNotExists } from './db/operations';
-import { connect } from 'http2';
+import express from "express";
+import { parseAndSaveExcelData } from "./utils/excelParser";
+import plantRoutes from "./routes/plantRoutes";
+import {
+  connectToDatabase,
+  createPlantsTableIfNotExists,
+} from "./db/operations";
 
 const app = express();
-const pool = new Pool(config.database);
 
-app.use('/api/plants', plantRoutes);
+app.use("/api/plants", plantRoutes);
 
 async function startServer() {
   try {
-    
     await connectToDatabase();
     await createPlantsTableIfNotExists();
     await parseAndSaveExcelData();
@@ -29,7 +27,10 @@ async function startServer() {
       console.log(`Server is running on port ${port}`);
     });
   } catch (error) {
-    console.error('Error connecting to the database or starting the server:', error);
+    console.error(
+      "Error connecting to the database or starting the server:",
+      error
+    );
     process.exit(1);
   }
 }

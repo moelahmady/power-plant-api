@@ -3,6 +3,11 @@ import { config } from "../config/config";
 
 const pool = new Pool(config.database);
 
+/**
+ * Connects to the database.
+ * @returns A promise that resolves when the connection is established.
+ * @throws An error if there is a problem connecting to the database.
+ */
 export async function connectToDatabase(): Promise<void> {
   try {
     await pool.connect();
@@ -12,6 +17,12 @@ export async function connectToDatabase(): Promise<void> {
     process.exit(1);
   }
 }
+
+/**
+ * Drops the plants table if it exists in the database.
+ * @returns A promise that resolves when the table is dropped successfully.
+ * @throws An error if there is a problem dropping the table.
+ */
 export async function dropPlantsTable(): Promise<void> {
   const dropTableQuery = `
     DROP TABLE IF EXISTS plants CASCADE;
@@ -24,13 +35,20 @@ export async function dropPlantsTable(): Promise<void> {
   }
 }
 
+/**
+ * Creates the plants table if it does not exist in the database.
+ * @returns A promise that resolves when the table is created successfully.
+ * @throws An error if there is a problem creating the table.
+ */
 export async function createPlantsTableIfNotExists(): Promise<void> {
   const createTableQuery = `
     CREATE TABLE IF NOT EXISTS plants (
       id SERIAL PRIMARY KEY,
       "plantName" VARCHAR(255),
       "plantState" VARCHAR(255),
-      "annualNetGeneration" FLOAT
+      "annualNetGeneration" FLOAT,
+      "lastUpdated" TIMESTAMP,
+      UNIQUE("plantName", "plantState")
     )
   `;
   try {
