@@ -26,11 +26,13 @@ export async function parseAndSaveExcelData(): Promise<void> {
 
     const insertQuery = `
       INSERT INTO plants (
-        "plantName", "plantState", "annualNetGeneration", "lastUpdated"
+        "plantName", "plantState", "annualNetGeneration", "latitude", "longitude", "lastUpdated"
       )
-      VALUES ($1, $2, $3, NOW())
+      VALUES ($1, $2, $3, $4, $5, NOW())
       ON CONFLICT ("plantName", "plantState") DO UPDATE SET
         "annualNetGeneration" = EXCLUDED."annualNetGeneration",
+        "latitude" = EXCLUDED."latitude",
+        "longitude" = EXCLUDED."longitude",
         "lastUpdated" = EXCLUDED."lastUpdated"
     `;
 
@@ -39,6 +41,8 @@ export async function parseAndSaveExcelData(): Promise<void> {
         row["PNAME"],
         row["PSTATABB"],
         row["PLNGENAN"],
+        row["LAT"],
+        row["LON"],
       ]);
     }
 

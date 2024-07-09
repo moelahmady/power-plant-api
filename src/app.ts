@@ -11,8 +11,11 @@ import {
   connectToDatabase,
   createPlantsTableIfNotExists,
 } from "./db/operations";
+import cors from "cors";
 
 const app = express();
+
+app.use(cors());
 
 app.use("/api/plants", plantRoutes);
 

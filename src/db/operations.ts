@@ -47,6 +47,8 @@ export async function createPlantsTableIfNotExists(): Promise<void> {
       "plantName" VARCHAR(255),
       "plantState" VARCHAR(255),
       "annualNetGeneration" FLOAT,
+      "latitude" DOUBLE PRECISION,
+      "longitude" DOUBLE PRECISION,
       "lastUpdated" TIMESTAMP,
       UNIQUE("plantName", "plantState")
     )
