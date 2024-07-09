@@ -53,15 +53,23 @@ Before running the application, you need to set up the environment variables:
    npm install
    ```
 
-2. Build the project:
+2. Navigate to the frontend directory and install its dependencies:
+
+   ```bash
+   cd frontend
+   npm install
+   cd ..
+   ```
+
+3. Build the project:
 
    ```bash
    npm run build
    ```
 
-3. Set `PG_HOST` to `localhost` in the `.env` file.
+4. Set `PG_HOST` to `localhost` in the `.env` file.
 
-4. Install Postgres locally:
+5. Install Postgres locally:
 
    - **For macOS using Homebrew**:
 
@@ -82,7 +90,7 @@ Before running the application, you need to set up the environment variables:
 
      Download and install PostgreSQL from [the official website](https://www.postgresql.org/download/windows/).
 
-5. Create a new database and user:
+6. Create a new database and user:
 
    ```bash
    psql -U postgres
@@ -92,15 +100,15 @@ Before running the application, you need to set up the environment variables:
    \q
    ```
 
-6. Update the `.env` file with the new database credentials.
+7. Update the `.env` file with the new database credentials.
 
-7. Start the application:
+8. Start the application:
 
    ```bash
    npm start
    ```
 
-8. **Build and Run the UI**:
+9. **Build and Run the UI**:
 
    The project includes scripts to handle the frontend (UI) build and run processes. You can build and run the UI using these scripts:
 
@@ -118,15 +126,15 @@ Before running the application, you need to set up the environment variables:
 
    By default, the UI development server will be available at `http://localhost:3001`.
 
-9. **Run Both Backend and Frontend Concurrently**:
+10. **Run Both Backend and Frontend Concurrently**:
 
-   You can run both the backend and the frontend concurrently in development mode using the following script:
+    You can run both the backend and the frontend concurrently in development mode using the following script:
 
-   ```bash
-   npm run dev
-   ```
+    ```bash
+    npm run dev
+    ```
 
-   This will start the backend server and the UI development server simultaneously.
+    This will start the backend server and the UI development server simultaneously.
 
 ## Running with Docker Compose
 
@@ -170,3 +178,7 @@ This request will return the top 5 plants from California.
 ---
 
 This updated README includes the scripts from the `package.json` and provides detailed instructions on how to build and run the UI locally.
+
+```
+
+```
