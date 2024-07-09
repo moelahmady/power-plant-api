@@ -7,6 +7,7 @@ import "./Map.css"; // Ensure the CSS file is imported
 import customMarkerImg from "./power-plant.png"; // Import the SVG file
 
 const states = [
+  { value: "", name: "All States" },
   { value: "AL", name: "Alabama" },
   { value: "AK", name: "Alaska" },
   { value: "AZ", name: "Arizona" },
@@ -72,7 +73,7 @@ L.Icon.Default.mergeOptions({
 });
 const Map = () => {
   const [plants, setPlants] = useState([]);
-  const [state, setState] = useState("CA");
+  const [state, setState] = useState("");
   const [topN, setTopN] = useState(10);
 
   useEffect(() => {
