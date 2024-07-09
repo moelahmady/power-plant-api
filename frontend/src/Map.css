@@ -1,0 +1,30 @@
+.map-container {
+  position: relative;
+}
+
+.controls {
+  position: absolute;
+  top: 100px;
+  left: 10px;
+  background: white;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.controls label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.controls select,
+.controls input {
+  margin-top: 5px;
+  width: 80%;
+}
+
+#map {
+  height: 100vh; /* Ensure the map takes full viewport height */
+  width: 100%; /* Ensure the map takes full width */
+}
