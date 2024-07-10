@@ -55,8 +55,30 @@ export async function createPlantsTableIfNotExists(): Promise<void> {
   `;
   try {
     await pool.query(createTableQuery);
-    console.log("Table created successfully");
+    console.log("Plants table created successfully");
   } catch (error) {
     console.error("Error creating table:", error);
   }
 }
+
+/**
+ * Creates the state_totals table if it does not exist in the database.
+ * @returns A promise that resolves when the table is created successfully.
+ * @throws An error if there is a problem creating the table.
+ */
+export async function createStateTotalsTableIfNotExists(): Promise<void> {
+  const createTableQuery = `
+    CREATE TABLE IF NOT EXISTS state_totals (
+      state VARCHAR(255) PRIMARY KEY,
+      "totalGeneration" FLOAT
+    )
+  `;
+  try {
+    await pool.query(createTableQuery);
+    console.log("State totals table created successfully");
+  } catch (error) {
+    console.error("Error creating state totals table:", error);
+  }
+}
+
+

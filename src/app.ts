@@ -10,6 +10,7 @@ import plantRoutes from "./routes/plantRoutes";
 import {
   connectToDatabase,
   createPlantsTableIfNotExists,
+  createStateTotalsTableIfNotExists,
 } from "./db/operations";
 import cors from "cors";
 import path from "path";
@@ -43,6 +44,7 @@ async function startServer() {
   try {
     await connectToDatabase();
     await createPlantsTableIfNotExists();
+    await createStateTotalsTableIfNotExists();
     await parseAndSaveExcelData();
 
     const port = process.env.APP_PORT || 3000;
