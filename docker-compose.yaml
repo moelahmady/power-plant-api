@@ -9,8 +9,6 @@ services:
       - .env
     depends_on:
       - db
-    volumes:
-      - ./src/data:/app/src/data
   db:
     container_name: pgdb
     image: postgres

@@ -1,0 +1,28 @@
+.
+├── Dockerfile
+├── README.md
+├── docker-compose.yaml
+├── package-lock.json
+├── package.json
+├── project-tree.txt
+├── src
+│   ├── app.ts
+│   ├── config
+│   │   └── config.ts
+│   ├── controllers
+│   │   └── plantController.ts
+│   ├── data
+│   │   └── egrid2022_data.xlsx
+│   ├── db
+│   │   └── operations.ts
+│   ├── models
+│   │   └── plant.ts
+│   ├── routes
+│   │   └── plantRoutes.ts
+│   ├── services
+│   │   └── plantService.ts
+│   └── utils
+│       └── excelParser.ts
+└── tsconfig.json
+
+10 directories, 16 files
