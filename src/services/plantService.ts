@@ -8,10 +8,11 @@
 
 import { Pool } from 'pg';
 import { config } from '../config/config';
+import { Plant } from '../models/plant';
 
 const pool = new Pool(config.database);
 
-export async function getTopPlantsWithPercentages(count: number, state?: string): Promise<any[]> {
+export async function getTopPlantsWithPercentages(count: number, state?: string): Promise< Plant []> {
   const query = `
   SELECT p.*, 
          ROUND(CAST((p."annualNetGeneration" / COALESCE(t.total_generation, 0)) * 100 AS NUMERIC), 2) AS "statePercentage"
