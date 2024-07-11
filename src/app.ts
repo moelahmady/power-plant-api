@@ -11,7 +11,7 @@ import {
   connectToDatabase,
   createPlantsTableIfNotExists,
   createStateTotalsTableIfNotExists,
-} from "./db/operations";
+} from "./db/initalizeOperations";
 import cors from "cors";
 import path from "path";
 import fs from "fs";
