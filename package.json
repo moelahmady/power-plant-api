@@ -12,7 +12,8 @@
     "start:prod": "node dist/app.js",
     "client": "npm start --prefix frontend",
     "client:build": "npm run build --prefix frontend",
-    "dev": "concurrently \"npm run client:build\" \"npm run start\""
+    "dev": "concurrently \"npm run client:build\" \"npm run start\"",
+    "start:dev": "nodemon --watch src --exec ts-node src/app.ts"
   },
   "keywords": [],
   "author": "",

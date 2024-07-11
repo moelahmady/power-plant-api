@@ -9,10 +9,11 @@
  */
 
 import express from 'express';
-import * as plantController from '../controllers/plantController';
+import { getTopPlantsHandler } from '../controllers/plantController';
+import { validateQuery } from '../middleware/validateQuery';
 
 const router = express.Router();
 
-router.get('/top', plantController.getTopPlantsHandler);
+router.get('/top', validateQuery, getTopPlantsHandler);
 
 export default router;

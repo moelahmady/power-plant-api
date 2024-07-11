@@ -27,9 +27,7 @@ const buildPath = path.join(__dirname, "../frontend/build");
 fs.readdir(buildPath, (err, files) => {
   if (err) {
     console.error("Error reading build directory:", err);
-  } else {
-    console.log("Build directory contents:", files);
-  }
+  } 
 });
 
 app.use(express.static(buildPath));
