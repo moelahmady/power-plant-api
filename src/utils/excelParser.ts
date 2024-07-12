@@ -1,4 +1,4 @@
-import xlsx from "xlsx";
+import xlsx from "@e965/xlsx";
 import { insertPlantsAndStates } from "../db/plantOperations";
 
 export async function parseAndSaveExcelData(): Promise<void> {
