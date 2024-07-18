@@ -26,27 +26,10 @@ pipeline {
             }
         }
 
-        stage('Print Environment Variables') {
-            steps {
-                script {
-                    echo "DOCKER_IMAGE: ${env.DOCKER_IMAGE}"
-                    echo "EXCEL_FILE_PATH: ${env.EXCEL_FILE_PATH}"
-                    echo "APP_PORT: ${env.APP_PORT}"
-                    echo "DB_TYPE: ${env.DB_TYPE}"
-                    echo "PG_HOST: ${env.PG_HOST}"
-                    echo "PG_DB: ${env.PG_DB}"
-                    echo "PG_PORT: ${env.PG_PORT}"
-                }
-            }
-        }
-
         stage('Deploy') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'db-credentials', usernameVariable: 'PG_USER', passwordVariable: 'PG_PASSWORD')]) {
                     script {
-                        echo "PG_USER: ${env.PG_USER}"
-                        echo "PG_PASSWORD: ${env.PG_PASSWORD}"
-                        
                         def compose = """
                         services:
                           expressapp:
@@ -100,13 +83,6 @@ pipeline {
                     }
                 }
             }
-        }
-    }
-
-    post {
-        always {
-            // Clean up any remaining containers
-            sh 'docker-compose down -v'
         }
     }
 }
